@@ -1,14 +1,15 @@
 package br.com.writeaway.domain.models
 
-import android.os.Parcelable
+import androidx.room.ColumnInfo
+import androidx.room.Entity
+import androidx.room.PrimaryKey
 import br.com.writeaway.R
-import kotlinx.parcelize.Parcelize
-import java.util.Calendar
+import java.util.Date
 
-@Parcelize
+@Entity
 data class Note(
-    val id: Int,
-    val description: String,
-    val date: Long = Calendar.getInstance().timeInMillis,
-    val color: Int = R.color.note_yellow,
-) : Parcelable
+    @PrimaryKey(autoGenerate = true) val id: Int = 0,
+    @ColumnInfo(name = "note_description") val description: String,
+    @ColumnInfo(name = "note_date") val date: Date? = Date(),
+    @ColumnInfo(name = "note_color") val color: Int = R.color.note_yellow,
+)

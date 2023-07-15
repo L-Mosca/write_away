@@ -2,4 +2,7 @@
     <string name="app_name">write away</string>
     <string name="homeTitle">Write Away</string>
     <string name="add_new_note">Adicione uma nova nota</string>
+    <string name="new_note">Nova Nota</string>
+    <string name="add_note_description">Escreva sua nota aqui</string>
+    <string name="color_list">Cor da nota</string>
 </resources>
