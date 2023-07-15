@@ -3,7 +3,7 @@
     <style name="Base.Theme.WriteAway" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <!-- Customize your light theme here. -->
         <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
-        <item name="android:statusBarColor">@color/white</item>
+        <item name="android:statusBarColor">@color/gray</item>
     </style>
 
     <style name="Theme.WriteAway" parent="Base.Theme.WriteAway" />

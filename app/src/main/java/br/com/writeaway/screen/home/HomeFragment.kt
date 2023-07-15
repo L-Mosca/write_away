@@ -17,8 +17,6 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
     private val adapter: NoteAdapter by lazy { NoteAdapter() }
 
     override fun initViews() {
-        viewModel.fetchNotes()
-
         binding.fabAddNote.setOnClickListener {
             val direction = HomeFragmentDirections.actionHomeFragmentToCreateNoteFragment()
             navigate(direction)
@@ -30,5 +28,10 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
             binding.rvNotes.adapter = adapter
             adapter.submitList(noteList)
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        viewModel.fetchNotes()
     }
 }

@@ -1,5 +1,7 @@
 package br.com.writeaway.screen.home.adapter
 
+import android.annotation.SuppressLint
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
@@ -32,22 +34,23 @@ class NoteAdapter :
             )
         }
 
+    @SuppressLint("ResourceAsColor")
     override fun onBindViewHolder(
         holder: ViewHolder<AdapterNoteBinding>,
         data: Note,
         position: Int
     ) {
         holder.binding.apply {
-            cvNote.setCardBackgroundColor(ContextCompat.getColor(root.context, data.color))
+            Log.e("testColor", data.color.toString())
+            cvNote.setCardBackgroundColor(data.color)
             tvNoteDescription.text = data.description
-            //tvNoteDate.text = formatDate(data.date)
+            tvNoteDate.text = formatDate(data.date)
         }
     }
 
-    private fun formatDate(timeMillis: Long): String {
+    private fun formatDate(date: Date): String {
         val format = "dd/MM/yyyy - HH:mm"
         val simpleDateFormat = SimpleDateFormat(format, Locale.getDefault())
-        val date = Date(timeMillis)
         return simpleDateFormat.format(date)
     }
 }

@@ -11,7 +11,9 @@ class NoteRepository @Inject constructor(private val application: Application) :
     override suspend fun fetchAllNotes(): List<Note> {
         val app = application as WriteAwayApp
         val dao = app.db.noteDao()
-        return dao.getNoteList()
+        val dataList = dao.getNoteList()
+
+        return dataList.sortedByDescending { it.date }
     }
 
     override suspend fun insertNote(note: Note) : Long? {
