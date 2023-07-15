@@ -40,7 +40,7 @@ class NoteAdapter :
         holder.binding.apply {
             cvNote.setCardBackgroundColor(ContextCompat.getColor(root.context, data.color))
             tvNoteDescription.text = data.description
-            tvNoteDate.text = formatDate(data.date)
+            //tvNoteDate.text = formatDate(data.date)
         }
     }
 
