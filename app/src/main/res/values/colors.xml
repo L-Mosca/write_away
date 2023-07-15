@@ -2,4 +2,15 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="yellow">#FFFFCA28</color>
+
+
+    <!--Note Colors-->
+    <color name="note_pink">#FFFD99FF</color>
+    <color name="note_red">#FFFF9E9E</color>
+    <color name="note_green">#FF91F48F</color>
+    <color name="note_yellow">#FFFFF599</color>
+    <color name="note_cian">#FF9EFFFF</color>
+    <color name="note_purple">#FFB69CFF</color>
+
 </resources>
