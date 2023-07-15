@@ -1,6 +1,5 @@
 package br.com.writeaway.screen.home
 
-import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import br.com.writeaway.base.BaseViewModel
 import br.com.writeaway.domain.models.Note
@@ -15,8 +14,7 @@ class HomeViewModel @Inject constructor(private val noteRepository: NoteReposito
 
     fun fetchNotes() {
         defaultLaunch {
-            val noteList = noteRepository.fetchAllNotes()
-            Log.e("testDBList", noteList.toString())
+            notes.postValue(noteRepository.fetchAllNotes())
         }
     }
 }
