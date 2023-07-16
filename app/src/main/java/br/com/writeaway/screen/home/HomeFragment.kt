@@ -2,6 +2,7 @@ package br.com.writeaway.screen.home
 
 import android.view.LayoutInflater
 import android.widget.Toast
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
 import br.com.writeaway.R
 import androidx.core.view.isVisible
@@ -10,6 +11,7 @@ import br.com.writeaway.databinding.FragmentHomeBinding
 import br.com.writeaway.screen.home.adapter.NoteAdapter
 import br.com.writeaway.util.navigate
 import br.com.writeaway.util.setAnimationStatus
+import br.com.writeaway.util.setStatusBarColor
 import com.google.android.material.snackbar.Snackbar
 import com.google.gson.Gson
 import dagger.hilt.android.AndroidEntryPoint
@@ -101,6 +103,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
 
     override fun onResume() {
         super.onResume()
+        setStatusBarColor(ContextCompat.getColor(requireContext(), R.color.white))
         viewModel.fetchNotes()
     }
 

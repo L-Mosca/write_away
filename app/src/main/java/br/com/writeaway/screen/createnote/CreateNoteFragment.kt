@@ -17,6 +17,7 @@ import androidx.core.content.ContextCompat
 import androidx.navigation.fragment.navArgs
 import br.com.writeaway.domain.models.Note
 import br.com.writeaway.util.hideKeyboard
+import br.com.writeaway.util.setStatusBarColor
 import br.com.writeaway.util.showKeyboard
 
 @AndroidEntryPoint
@@ -63,6 +64,7 @@ class CreateNoteFragment : BaseFragment<FragmentCreateNoteBinding>() {
         viewModel.editTextFocus.observe(viewLifecycleOwner) {
             binding.etNoteDescription.requestFocus()
             showKeyboard(binding.etNoteDescription)
+            setStatusBarColor(ContextCompat.getColor(requireContext(), R.color.note_yellow))
         }
 
         viewModel.initialData.observe(viewLifecycleOwner) { note ->
@@ -90,6 +92,7 @@ class CreateNoteFragment : BaseFragment<FragmentCreateNoteBinding>() {
             Editable.Factory.getInstance().newEditable(note.description)
         binding.clCreateNote.setBackgroundColor(note.color)
         adapter.oldColor = note.color
+        setStatusBarColor(note.color)
     }
 
     private fun setupAdapter() {
@@ -113,8 +116,10 @@ class CreateNoteFragment : BaseFragment<FragmentCreateNoteBinding>() {
         colorAnimator.addUpdateListener { animator ->
             val animatedValue = animator.animatedValue as Int
             binding.clCreateNote.setBackgroundColor(animatedValue)
+            setStatusBarColor(cardColor)
         }
         colorAnimator.start()
+
     }
 
     private fun getColorList(): List<Int> {
