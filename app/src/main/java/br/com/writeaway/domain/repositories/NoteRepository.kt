@@ -22,4 +22,10 @@ class NoteRepository @Inject constructor(private val application: Application) :
         return dao.insertNote(note)
     }
 
+    override suspend fun updateNote(note: Note) {
+        val app = application as WriteAwayApp
+        val dao = app.db.noteDao()
+        dao.updateNote(note)
+    }
+
 }

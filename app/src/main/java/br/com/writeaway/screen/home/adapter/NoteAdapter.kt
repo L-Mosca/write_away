@@ -34,6 +34,8 @@ class NoteAdapter :
             )
         }
 
+    var onNoteClicked : ((Note) -> Unit)? = null
+
     @SuppressLint("ResourceAsColor")
     override fun onBindViewHolder(
         holder: ViewHolder<AdapterNoteBinding>,
@@ -41,7 +43,10 @@ class NoteAdapter :
         position: Int
     ) {
         holder.binding.apply {
-            Log.e("testColor", data.color.toString())
+            cvNote.setOnClickListener {
+                onNoteClicked?.invoke(data)
+            }
+
             cvNote.setCardBackgroundColor(data.color)
             tvNoteDescription.text = data.description
             tvNoteDate.text = formatDate(data.date)

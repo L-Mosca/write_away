@@ -46,36 +46,42 @@ private fun buildOptions(
                     popEnter = R.anim.translate_right_enter
                     popExit = R.anim.translate_right_exit
                 }
+
                 TransitionAnimation.TRANSLATE_FROM_DOWN -> {
                     enter = R.anim.translate_slide_bottom_up
                     exit = R.anim.translate_no_change
                     popEnter = R.anim.translate_no_change
                     popExit = R.anim.translate_slide_bottom_down
                 }
+
                 TransitionAnimation.TRANSLATE_FROM_LEFT -> {
                     enter = R.anim.translate_right_enter
                     exit = R.anim.translate_right_exit
                     popEnter = R.anim.translate_left_enter
                     popExit = R.anim.translate_left_exit
                 }
+
                 TransitionAnimation.TRANSLATE_FROM_UP -> {
                     enter = R.anim.translate_slide_bottom_down
                     exit = R.anim.translate_no_change
                     popEnter = R.anim.translate_no_change
                     popExit = R.anim.translate_slide_bottom_up
                 }
+
                 TransitionAnimation.NO_ANIMATION -> {
                     enter = R.anim.translate_no_change
                     exit = R.anim.translate_no_change
                     popEnter = R.anim.translate_no_change
                     popExit = R.anim.translate_no_change
                 }
+
                 TransitionAnimation.FADE -> {
                     enter = R.anim.translate_fade_in
                     exit = R.anim.translate_fade_out
                     popEnter = R.anim.translate_fade_in
                     popExit = R.anim.translate_fade_out
                 }
+
                 else -> {
                 }
             }
@@ -95,4 +101,10 @@ fun Fragment.hideKeyboard() {
     val inputMethodManager =
         context?.getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
     inputMethodManager?.hideSoftInputFromWindow(view?.windowToken, 0)
+}
+
+fun Fragment.showKeyboard(view: View) {
+    val inputMethodManager =
+        context?.getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
+    inputMethodManager?.showSoftInput(view, InputMethodManager.SHOW_IMPLICIT)
 }
