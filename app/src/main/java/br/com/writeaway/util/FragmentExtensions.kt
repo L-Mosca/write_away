@@ -2,6 +2,7 @@ package br.com.writeaway.util
 
 import android.content.Context
 import android.view.View
+import android.view.WindowManager
 import android.view.inputmethod.InputMethodManager
 import androidx.annotation.IdRes
 import androidx.fragment.app.Fragment
@@ -117,4 +118,10 @@ fun LottieAnimationView.setAnimationStatus(startAnimation: Boolean, whenFalse: (
         whenFalse.invoke()
         this.pauseAnimation()
     }
+}
+
+fun Fragment.setStatusBarColor(color: Int) {
+    val windows = requireActivity().window
+    windows.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
+    windows.statusBarColor = color
 }
