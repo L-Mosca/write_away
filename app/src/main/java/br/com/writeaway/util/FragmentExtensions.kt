@@ -11,6 +11,7 @@ import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.navOptions
 import br.com.writeaway.R
+import com.airbnb.lottie.LottieAnimationView
 
 enum class TransitionAnimation {
     TRANSLATE_FROM_RIGHT, TRANSLATE_FROM_DOWN, TRANSLATE_FROM_LEFT, TRANSLATE_FROM_UP, NO_ANIMATION, FADE
@@ -107,4 +108,13 @@ fun Fragment.showKeyboard(view: View) {
     val inputMethodManager =
         context?.getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
     inputMethodManager?.showSoftInput(view, InputMethodManager.SHOW_IMPLICIT)
+}
+
+fun LottieAnimationView.setAnimationStatus(startAnimation: Boolean, whenFalse: () -> Unit = {}) {
+    if (startAnimation) {
+        this.playAnimation()
+    } else {
+        whenFalse.invoke()
+        this.pauseAnimation()
+    }
 }
