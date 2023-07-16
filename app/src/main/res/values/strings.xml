@@ -5,4 +5,9 @@
     <string name="new_note">Nova Nota</string>
     <string name="add_note_description">Escreva sua nota aqui</string>
     <string name="color_list">Cor da nota</string>
+
+    <string name="note_save_success">Nota salva com sucesso</string>
+    <string name="note_update_success">Nota atualizada com sucesso</string>
+    <string name="empty_note_description">Escreva alguma mensagem</string>
+    <string name="default_error_message">Ocorreu um erro inesperado</string>
 </resources>

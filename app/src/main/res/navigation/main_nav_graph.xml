@@ -18,5 +18,11 @@
         android:id="@+id/createNoteFragment"
         android:name="br.com.writeaway.screen.createnote.CreateNoteFragment"
         android:label="CreateNoteFragment"
-        tools:layout="@layout/fragment_create_note" />
+        tools:layout="@layout/fragment_create_note">
+        <argument
+            android:name="note"
+            android:defaultValue="@null"
+            app:argType="string"
+            app:nullable="true" />
+    </fragment>
 </navigation>

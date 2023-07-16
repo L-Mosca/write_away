@@ -6,5 +6,7 @@ import br.com.writeaway.domain.models.Note
 interface NoteRepositoryContract {
     suspend fun fetchAllNotes(): List<Note>
 
-    suspend fun insertNote(note: Note) : Long?
+    suspend fun insertNote(note: Note): Long?
+
+    suspend fun updateNote(note: Note)
 }

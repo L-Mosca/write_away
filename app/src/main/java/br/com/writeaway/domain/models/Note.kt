@@ -9,7 +9,7 @@ import java.util.Date
 @Entity
 data class Note(
     @PrimaryKey(autoGenerate = true) val id: Int = 0,
-    @ColumnInfo(name = "note_description") val description: String,
-    @ColumnInfo(name = "note_date") val date: Date = Date(),
-    @ColumnInfo(name = "note_color") val color: Int = R.color.note_yellow,
+    @ColumnInfo(name = "note_description") var description: String,
+    @ColumnInfo(name = "note_date") var date: Date = Date(),
+    @ColumnInfo(name = "note_color") var color: Int = R.color.note_yellow,
 )

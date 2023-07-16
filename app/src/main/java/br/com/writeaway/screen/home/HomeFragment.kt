@@ -6,6 +6,7 @@ import br.com.writeaway.base.BaseFragment
 import br.com.writeaway.databinding.FragmentHomeBinding
 import br.com.writeaway.screen.home.adapter.NoteAdapter
 import br.com.writeaway.util.navigate
+import com.google.gson.Gson
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -17,6 +18,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
     private val adapter: NoteAdapter by lazy { NoteAdapter() }
 
     override fun initViews() {
+        setupAdapter()
         binding.fabAddNote.setOnClickListener {
             val direction = HomeFragmentDirections.actionHomeFragmentToCreateNoteFragment()
             navigate(direction)
@@ -25,9 +27,18 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
 
     override fun initObservers() {
         viewModel.notes.observe(viewLifecycleOwner) { noteList ->
-            binding.rvNotes.adapter = adapter
             adapter.submitList(noteList)
         }
+    }
+
+    private fun setupAdapter() {
+        adapter.onNoteClicked = { note ->
+            val direction = HomeFragmentDirections.actionHomeFragmentToCreateNoteFragment(
+                note = Gson().toJson(note)
+            )
+            navigate(direction)
+        }
+        binding.rvNotes.adapter = adapter
     }
 
     override fun onResume() {
