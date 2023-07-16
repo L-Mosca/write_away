@@ -11,7 +11,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="16dp"
-        android:elevation="10dp"
+        android:elevation="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -38,6 +38,19 @@
                 app:layout_constraintTop_toTopOf="parent"
                 tools:text="Esta é uma anotação que foi escrita em uma anotação com o intuito de testas a quantidade de caracteres que a nota irá comportar e ver o design do card com muitos caracteres na descrição da nota" />
 
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/ivDeleteItem"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="16dp"
+                android:background="@color/white"
+                android:elevation="10dp"
+                android:src="@drawable/ic_delete"
+                android:tint="@color/red"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tvNoteDescription" />
+
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/tvNoteDate"
                 android:layout_width="wrap_content"
@@ -49,6 +62,6 @@
                 app:layout_constraintTop_toBottomOf="@id/tvNoteDescription"
                 tools:text="00/00/0000 - 10:00" />
         </androidx.constraintlayout.widget.ConstraintLayout>
-
     </com.google.android.material.card.MaterialCardView>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

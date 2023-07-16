@@ -11,10 +11,21 @@ import javax.inject.Inject
 class HomeViewModel @Inject constructor(private val noteRepository: NoteRepositoryContract) :
     BaseViewModel() {
     val notes = MutableLiveData<List<Note>>()
+    val deleteSuccess = MutableLiveData<Note>()
+    val deleteError = MutableLiveData<Unit>()
 
     fun fetchNotes() {
         defaultLaunch {
             notes.postValue(noteRepository.fetchAllNotes())
+        }
+    }
+
+    fun deleteNote(note: Note) {
+        defaultLaunch(exceptionHandler = {
+            deleteError.postValue(Unit)
+        }) {
+            noteRepository.deleteNote(note)
+            deleteSuccess.postValue(note)
         }
     }
 }

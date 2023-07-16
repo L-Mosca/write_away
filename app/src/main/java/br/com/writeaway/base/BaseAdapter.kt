@@ -27,7 +27,7 @@ abstract class BaseAdapter<VB: ViewBinding, T>: RecyclerView.Adapter<ViewHolder<
     override fun getItemCount() = dataList.size
 
     fun removeItem(position: Int) {
-        var list = dataList.toMutableList()
+        val list = dataList.toMutableList()
         list.removeAt(position)
         dataList = list.toList()
         notifyDataSetChanged()
