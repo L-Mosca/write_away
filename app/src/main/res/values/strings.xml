@@ -11,4 +11,6 @@
     <string name="empty_note_description">Escreva alguma mensagem</string>
     <string name="default_error_message">Ocorreu um erro inesperado</string>
     <string name="delete_note_success">Nota deletada com sucesso</string>
+    <string name="undo">Desfazer</string>
+    <string name="empty_list">Nenhuma anotação encontrada</string>
 </resources>

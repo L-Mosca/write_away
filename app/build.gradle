@@ -89,4 +89,7 @@ dependencies {
     kapt 'androidx.room:room-compiler:2.5.2'
     annotationProcessor "androidx.room:room-compiler:2.5.2"
     testImplementation "androidx.room:room-testing:2.5.2"
+
+    // Lottie files
+    implementation 'com.airbnb.android:lottie:5.0.3'
 }
