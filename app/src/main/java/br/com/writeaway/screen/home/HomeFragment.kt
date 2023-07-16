@@ -1,7 +1,9 @@
 package br.com.writeaway.screen.home
 
 import android.view.LayoutInflater
+import android.widget.Toast
 import androidx.fragment.app.viewModels
+import br.com.writeaway.R
 import br.com.writeaway.base.BaseFragment
 import br.com.writeaway.databinding.FragmentHomeBinding
 import br.com.writeaway.screen.home.adapter.NoteAdapter
@@ -29,6 +31,20 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
         viewModel.notes.observe(viewLifecycleOwner) { noteList ->
             adapter.submitList(noteList)
         }
+
+        viewModel.deleteSuccess.observe(viewLifecycleOwner) { note ->
+            val newList = adapter.currentList.toMutableList()
+            newList.removeIf { it.id == note.id }
+            adapter.submitList(newList.toList())
+        }
+
+        viewModel.deleteError.observe(viewLifecycleOwner) {
+            Toast.makeText(
+                requireContext(),
+                getString(R.string.default_error_message),
+                Toast.LENGTH_SHORT
+            ).show()
+        }
     }
 
     private fun setupAdapter() {
@@ -38,6 +54,10 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
             )
             navigate(direction)
         }
+        adapter.onDeleteClicked = { note ->
+            viewModel.deleteNote(note)
+        }
+
         binding.rvNotes.adapter = adapter
     }
 

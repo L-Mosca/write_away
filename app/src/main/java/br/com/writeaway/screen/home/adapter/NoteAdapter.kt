@@ -1,10 +1,8 @@
 package br.com.writeaway.screen.home.adapter
 
 import android.annotation.SuppressLint
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.DiffUtil
 import br.com.writeaway.base.BaseListAdapter
 import br.com.writeaway.base.ViewHolder
@@ -34,7 +32,8 @@ class NoteAdapter :
             )
         }
 
-    var onNoteClicked : ((Note) -> Unit)? = null
+    var onNoteClicked: ((Note) -> Unit)? = null
+    var onDeleteClicked: ((Note) -> Unit)? = null
 
     @SuppressLint("ResourceAsColor")
     override fun onBindViewHolder(
@@ -45,6 +44,10 @@ class NoteAdapter :
         holder.binding.apply {
             cvNote.setOnClickListener {
                 onNoteClicked?.invoke(data)
+            }
+
+            ivDeleteItem.setOnClickListener {
+                onDeleteClicked?.invoke(data)
             }
 
             cvNote.setCardBackgroundColor(data.color)

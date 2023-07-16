@@ -4,6 +4,7 @@
     <color name="white">#FFFFFFFF</color>
     <color name="yellow">#FFFFCA28</color>
     <color name="gray">#FFF6F5F5</color>
+    <color name="gray_dark">#B6B6B6</color>
 
 
     <!--Note Colors-->
@@ -13,5 +14,6 @@
     <color name="note_yellow">#FFFFF599</color>
     <color name="note_cian">#FF9EFFFF</color>
     <color name="note_purple">#FFB69CFF</color>
+    <color name="red">#FFFF0000</color>
 
 </resources>
