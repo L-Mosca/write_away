@@ -3,6 +3,7 @@ package br.com.writeaway.screen.home.adapter
 import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.DiffUtil
 import br.com.writeaway.base.BaseListAdapter
 import br.com.writeaway.base.ViewHolder
@@ -34,6 +35,7 @@ class NoteAdapter :
 
     var onNoteClicked: ((Note) -> Unit)? = null
     var onDeleteClicked: ((Note) -> Unit)? = null
+    var onLockClicked: ((Note) -> Unit)? = null
 
     @SuppressLint("ResourceAsColor")
     override fun onBindViewHolder(
@@ -46,13 +48,23 @@ class NoteAdapter :
                 onNoteClicked?.invoke(data)
             }
 
-            ivDeleteItem.setOnClickListener {
+           ivDeleteItem.setOnClickListener {
                 onDeleteClicked?.invoke(data)
             }
 
-            cvNote.setCardBackgroundColor(data.color)
-            tvNoteDescription.text = data.description
-            tvNoteDate.text = formatDate(data.date)
+            /*tvNoteDescription.setOnClickListener {
+               onLockClicked?.invoke(data)
+           }*/
+
+            with(data) {
+                cvNote.setCardBackgroundColor(color)
+                tvNoteTitle.text = title
+                tvNoteDescription.text = description
+                tvNoteDate.text = formatDate(date)
+
+                //tvNoteDescription.isVisible = !data.isProtectedNote
+                //tvNoteBlocked.isVisible = data.isProtectedNote
+            }
         }
     }
 

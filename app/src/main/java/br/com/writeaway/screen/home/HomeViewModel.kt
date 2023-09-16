@@ -15,6 +15,7 @@ class HomeViewModel @Inject constructor(private val noteRepository: NoteReposito
     val deleteError = MutableLiveData<Unit>()
     val saveError = MutableLiveData<Unit>()
     val saveSuccess = MutableLiveData<Note>()
+    val showBiometricView = MutableLiveData<Note>()
 
     fun fetchNotes() {
         defaultLaunch {
@@ -43,5 +44,10 @@ class HomeViewModel @Inject constructor(private val noteRepository: NoteReposito
                 deleteSuccess.postValue(note)
             }
         }
+    }
+
+    fun blockedNoteClicked(note: Note) {
+        if (note.isProtectedNote)
+            showBiometricView.postValue(note)
     }
 }

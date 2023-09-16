@@ -1,20 +1,24 @@
 package br.com.writeaway.screen.home
 
+import android.content.res.ColorStateList
 import android.view.LayoutInflater
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
+import androidx.biometric.BiometricPrompt
 import androidx.core.content.ContextCompat
+import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import br.com.writeaway.R
-import androidx.core.view.isVisible
 import br.com.writeaway.base.BaseFragment
 import br.com.writeaway.databinding.FragmentHomeBinding
+import br.com.writeaway.domain.models.Note
 import br.com.writeaway.screen.home.adapter.NoteAdapter
 import br.com.writeaway.util.navigate
-import br.com.writeaway.util.setAnimationStatus
 import br.com.writeaway.util.setStatusBarColor
 import com.google.android.material.snackbar.Snackbar
 import com.google.gson.Gson
 import dagger.hilt.android.AndroidEntryPoint
+import java.util.concurrent.Executor
 
 @AndroidEntryPoint
 class HomeFragment : BaseFragment<FragmentHomeBinding>() {
@@ -25,6 +29,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
     private val adapter: NoteAdapter by lazy { NoteAdapter() }
 
     override fun initViews() {
+        binding.fabAddNote.imageTintList = ColorStateList.valueOf(resources.getColor(R.color.white))
         setupAdapter()
         binding.fabAddNote.setOnClickListener {
             val direction = HomeFragmentDirections.actionHomeFragmentToCreateNoteFragment()
@@ -33,6 +38,10 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
     }
 
     override fun initObservers() {
+        viewModel.showBiometricView.observe(viewLifecycleOwner) { note ->
+            authenticateWithBiometrics(note)
+        }
+
         viewModel.saveSuccess.observe(viewLifecycleOwner) { note ->
             val newList = adapter.currentList.toMutableList()
             newList.add(note)
@@ -54,9 +63,9 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
         }
 
         viewModel.deleteSuccess.observe(viewLifecycleOwner) { note ->
-            if (note != null) {
+            note?.let { data ->
                 val newList = adapter.currentList.toMutableList()
-                newList.removeIf { it.id == note.id }
+                newList.removeIf { it.id == data.id }
                 adapter.submitList(newList.toList())
 
                 showEmptyPlaceHolder(newList.isEmpty())
@@ -67,7 +76,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
                     Snackbar.LENGTH_LONG
                 )
                 snackBar.setAction(getString(R.string.undo)) {
-                    viewModel.saveNote(note)
+                    viewModel.saveNote(data)
                 }
                 snackBar.show()
             }
@@ -83,22 +92,68 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
     }
 
     private fun setupAdapter() {
+        adapter.onLockClicked = { note -> viewModel.blockedNoteClicked(note) }
         adapter.onNoteClicked = { note ->
             val direction = HomeFragmentDirections.actionHomeFragmentToCreateNoteFragment(
                 note = Gson().toJson(note)
             )
             navigate(direction)
         }
-        adapter.onDeleteClicked = { note ->
-            viewModel.deleteNote(note)
-        }
-
+        adapter.onDeleteClicked = { note -> viewModel.deleteNote(note) }
         binding.rvNotes.adapter = adapter
     }
 
     private fun showEmptyPlaceHolder(isVisible: Boolean) {
-        binding.includeEmptyList.clPlaceHolder.isVisible = isVisible
-        binding.includeEmptyList.lavEmptyNotes.setAnimationStatus(isVisible)
+        binding.stub.isVisible = isVisible
+    }
+
+    private fun authenticateWithBiometrics(note: Note) {
+        val executor: Executor = ContextCompat.getMainExecutor(requireContext())
+
+        val biometricPrompt = BiometricPrompt(
+            this,
+            executor,
+            object : BiometricPrompt.AuthenticationCallback() {
+                override fun onAuthenticationError(errorCode: Int, errString: CharSequence) {
+                    super.onAuthenticationError(errorCode, errString)
+                    showAuthenticationErrorDialog(note)
+                }
+
+                override fun onAuthenticationSucceeded(result: BiometricPrompt.AuthenticationResult) {
+                    super.onAuthenticationSucceeded(result)
+                    val direction = HomeFragmentDirections.actionHomeFragmentToCreateNoteFragment(
+                        note = Gson().toJson(note)
+                    )
+                    navigate(direction)
+                }
+
+                override fun onAuthenticationFailed() {
+                    super.onAuthenticationFailed()
+                    showAuthenticationErrorDialog(note)
+                }
+            })
+
+        val promptInfo = BiometricPrompt.PromptInfo.Builder()
+            .setTitle(getString(R.string.biometric_authenticate_title))
+            .setDescription(getString(R.string.biometric_authenticate_message))
+            .setNegativeButtonText(getString(R.string.cancel))
+            .build()
+
+        biometricPrompt.authenticate(promptInfo)
+    }
+
+    private fun showAuthenticationErrorDialog(note: Note) {
+        val builder = AlertDialog.Builder(requireContext())
+        builder.setTitle("Authentication Error")
+        builder.setMessage("Authentication failed. Please try again.")
+        builder.setPositiveButton("Try Again") { _, _ ->
+            authenticateWithBiometrics(note)
+        }
+        builder.setNegativeButton("Cancel") { dialog, _ ->
+            dialog.dismiss()
+        }
+        val dialog = builder.create()
+        dialog.show()
     }
 
     override fun onResume() {

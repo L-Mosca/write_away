@@ -93,4 +93,8 @@ dependencies {
 
     // Lottie files
     implementation 'com.airbnb.android:lottie:5.0.3'
+
+    // Biometric Manager
+    implementation "androidx.biometric:biometric-ktx:1.2.0-alpha05"
+
 }

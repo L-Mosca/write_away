@@ -1,5 +1,6 @@
 package br.com.writeaway.util
 
+import android.app.KeyguardManager
 import android.content.Context
 import android.view.View
 import android.view.WindowManager
@@ -124,4 +125,10 @@ fun Fragment.setStatusBarColor(color: Int) {
     val windows = requireActivity().window
     windows.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
     windows.statusBarColor = color
+}
+
+fun Fragment.hasDevicePassword(): Boolean {
+    val keyguardManager =
+        requireContext().getSystemService(Context.KEYGUARD_SERVICE) as KeyguardManager
+    return keyguardManager.isKeyguardSecure
 }

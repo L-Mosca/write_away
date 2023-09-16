@@ -25,7 +25,7 @@ abstract class WriteAwayDb : RoomDatabase() {
                         context.applicationContext,
                         WriteAwayDb::class.java,
                         "WriteAwayApp.Database"
-                    ).build()
+                    ).fallbackToDestructiveMigration().build()
                 }
                 INSTANCE as WriteAwayDb
             } else {

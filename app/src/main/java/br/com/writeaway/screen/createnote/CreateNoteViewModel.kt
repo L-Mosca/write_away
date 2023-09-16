@@ -17,18 +17,29 @@ class CreateNoteViewModel @Inject constructor(private val noteRepository: NoteRe
     val saveError = MutableLiveData<Unit>()
     val updateSuccess = MutableLiveData<Unit>()
     val invalidDescription = MutableLiveData<Unit>()
-    val initialData = MutableLiveData<Note>()
+    val initialData = MutableLiveData<Note?>()
     val editTextFocus = MutableLiveData<Unit>()
     val updateError = MutableLiveData<Unit>()
 
-    fun submitNote(noteDescription: String, noteColor: Int, noteArgs: String?) {
+    fun submitNote(
+        noteTitle: String,
+        noteDescription: String,
+        noteColor: Int,
+        noteArgs: String?,
+        noteHasPassword: Boolean
+    ) {
         if (noteArgs.isNullOrEmpty())
-            saveNote(noteDescription, noteColor)
+            saveNote(noteTitle, noteDescription, noteColor, noteHasPassword)
         else
-            updateNote(noteArgs, noteDescription, noteColor)
+            updateNote(noteArgs, noteDescription, noteColor, noteHasPassword)
     }
 
-    private fun saveNote(noteDescription: String, color: Int) {
+    private fun saveNote(
+        noteTitle: String,
+        noteDescription: String,
+        color: Int,
+        noteHasPassword: Boolean
+    ) {
         if (noteDescription.isEmpty()) {
             invalidDescription.postValue(Unit)
             return
@@ -37,7 +48,13 @@ class CreateNoteViewModel @Inject constructor(private val noteRepository: NoteRe
         defaultLaunch(exceptionHandler = {
             saveError.postValue(Unit)
         }) {
-            val newNote = Note(description = noteDescription, date = Date(), color = color)
+            val newNote = Note(
+                title = noteTitle,
+                description = noteDescription,
+                date = Date(),
+                color = color,
+                isProtectedNote = noteHasPassword
+            )
             val id = noteRepository.insertNote(newNote)
             if (id != null && id > 0)
                 saveSuccess.postValue(Unit)
@@ -46,26 +63,29 @@ class CreateNoteViewModel @Inject constructor(private val noteRepository: NoteRe
         }
     }
 
-    private fun updateNote(noteArg: String, newDescription: String, newColor: Int) {
-        defaultLaunch(exceptionHandler = {
-            updateError.postValue(Unit)
-        }) {
+    private fun updateNote(
+        noteArg: String,
+        newDescription: String,
+        newColor: Int,
+        noteHasPassword: Boolean
+    ) {
+        defaultLaunch(exceptionHandler = { updateError.postValue(Unit) }) {
             val newNote = Gson().fromJson(noteArg, Note::class.java)
-            newNote.description = newDescription
-            newNote.color = newColor
-            newNote.date = Date()
+            newNote.apply {
+                description = newDescription
+                color = newColor
+                date = Date()
+                isProtectedNote = noteHasPassword
+            }
             noteRepository.updateNote(newNote)
             updateSuccess.postValue(Unit)
         }
     }
 
-    fun setInitialData(note: String?) {
-        try {
-            if (!note.isNullOrEmpty())
-                initialData.postValue(Gson().fromJson(note, Note::class.java))
-            else
-                editTextFocus.postValue(Unit)
-        } catch (e: Exception) {
+    fun setInitialData(note: Note?) {
+        if (note != null) {
+            initialData.postValue(note)
+        } else {
             editTextFocus.postValue(Unit)
         }
     }
