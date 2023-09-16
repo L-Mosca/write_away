@@ -14,11 +14,14 @@ import android.annotation.SuppressLint
 import android.text.Editable
 import android.widget.Toast
 import androidx.core.content.ContextCompat
+import androidx.core.view.isVisible
 import androidx.navigation.fragment.navArgs
 import br.com.writeaway.domain.models.Note
+import br.com.writeaway.util.hasDevicePassword
 import br.com.writeaway.util.hideKeyboard
 import br.com.writeaway.util.setStatusBarColor
 import br.com.writeaway.util.showKeyboard
+import com.google.gson.Gson
 
 @AndroidEntryPoint
 class CreateNoteFragment : BaseFragment<FragmentCreateNoteBinding>() {
@@ -28,11 +31,15 @@ class CreateNoteFragment : BaseFragment<FragmentCreateNoteBinding>() {
 
     private val adapter: ColorAdapter by lazy { ColorAdapter() }
     private val args: CreateNoteFragmentArgs by navArgs()
+    private var noteData: Note? = null
 
     override fun initViews() {
-        viewModel.setInitialData(args.note)
+        noteData = Gson().fromJson(args.note, Note::class.java)
+        viewModel.setInitialData(noteData)
         setupAdapter()
         binding.fabSaveNote.setOnClickListener { onFabClicked() }
+        //binding.swProtectNote.isVisible = hasDevicePassword()
+        binding.swProtectNote.isVisible = true
     }
 
     override fun initObservers() {
@@ -62,13 +69,13 @@ class CreateNoteFragment : BaseFragment<FragmentCreateNoteBinding>() {
         }
 
         viewModel.editTextFocus.observe(viewLifecycleOwner) {
-            binding.etNoteDescription.requestFocus()
+            binding.etNoteTitle.requestFocus()
             showKeyboard(binding.etNoteDescription)
             setStatusBarColor(ContextCompat.getColor(requireContext(), R.color.note_yellow))
         }
 
         viewModel.initialData.observe(viewLifecycleOwner) { note ->
-            setupInitialData(note)
+            note?.let { setupInitialData(it) }
         }
 
         viewModel.saveSuccess.observe(viewLifecycleOwner) {
@@ -90,9 +97,11 @@ class CreateNoteFragment : BaseFragment<FragmentCreateNoteBinding>() {
     private fun setupInitialData(note: Note) {
         binding.etNoteDescription.text =
             Editable.Factory.getInstance().newEditable(note.description)
+        binding.etNoteTitle.text = Editable.Factory.getInstance().newEditable(note.title)
         binding.clCreateNote.setBackgroundColor(note.color)
         adapter.oldColor = note.color
         setStatusBarColor(note.color)
+        binding.swProtectNote.isChecked = note.isProtectedNote
     }
 
     private fun setupAdapter() {
@@ -119,7 +128,6 @@ class CreateNoteFragment : BaseFragment<FragmentCreateNoteBinding>() {
             setStatusBarColor(cardColor)
         }
         colorAnimator.start()
-
     }
 
     private fun getColorList(): List<Int> {
@@ -141,9 +149,11 @@ class CreateNoteFragment : BaseFragment<FragmentCreateNoteBinding>() {
             R.color.note_yellow
         ) else adapter.oldColor
         viewModel.submitNote(
+            noteTitle = binding.etNoteTitle.text.toString(),
             noteDescription = binding.etNoteDescription.text.toString(),
             noteColor = cardColor,
-            noteArgs = args.note
+            noteArgs = args.note,
+            noteHasPassword = binding.swProtectNote.isChecked
         )
         hideKeyboard()
     }

@@ -13,4 +13,11 @@
     <string name="delete_note_success">Nota deletada com sucesso</string>
     <string name="undo">Desfazer</string>
     <string name="empty_list">Nenhuma anotação encontrada</string>
+    <string name="unlock">Desbloqueie</string>
+    <string name="protect_note">Proteger nota com senha</string>
+    <string name="biometric_authenticate_title">Autenticação Requerida</string>
+    <string name="biometric_authenticate_message">Realize a autenticação para ver/editar a nota</string>
+    <string name="cancel">Cancelar</string>
+    <string name="blocked_note">Nota Bloqueada</string>
+    <string name="add_note_title">Título da nota</string>
 </resources>

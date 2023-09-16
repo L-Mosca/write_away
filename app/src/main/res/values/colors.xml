@@ -5,6 +5,7 @@
     <color name="yellow">#FFFFCA28</color>
     <color name="gray">#FFF6F5F5</color>
     <color name="gray_dark">#B6B6B6</color>
+    <color name="overshadow">#F2DCDCDC</color>
 
 
     <!--Note Colors-->

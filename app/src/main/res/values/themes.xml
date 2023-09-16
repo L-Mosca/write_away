@@ -1,11 +1,21 @@
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
     <!-- Base application theme. -->
     <style name="Base.Theme.WriteAway" parent="Theme.MaterialComponents.Light.NoActionBar">
         <!-- Customize your light theme here. -->
         <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
         <item name="android:statusBarColor">@android:color/transparent</item>
         <item name="android:windowLightStatusBar">true</item>
+
+        <item name="floatingActionButtonStyle">@style/WriteAwayFloatingButtonStyle</item>
     </style>
 
     <style name="Theme.WriteAway" parent="Base.Theme.WriteAway" />
+
+    <style name="WriteAwayFloatingButtonStyle" parent="Widget.Design.FloatingActionButton">
+        <item name="android:elevation">6dp</item>
+        <item name="borderWidth">2dp</item>
+        <item name="backgroundTint">@color/yellow</item>
+        <item name="tint">@color/white</item>
+        <item name="strokeColor">@color/black</item>
+    </style>
 </resources>

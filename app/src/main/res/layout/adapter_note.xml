@@ -25,6 +25,37 @@
             android:paddingBottom="5dp">
 
             <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/tvNoteBlocked"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:clickable="false"
+                android:text="@string/blocked_note"
+                android:textAlignment="center"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:visibility="invisible"
+                app:layout_constraintBottom_toTopOf="@id/tvNoteDate"
+                app:layout_constraintEnd_toEndOf="@id/tvNoteDescription"
+                app:layout_constraintStart_toStartOf="@id/tvNoteDescription"
+                app:layout_constraintTop_toBottomOf="@id/tvNoteTitle" />
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/tvNoteTitle"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="10dp"
+                android:layout_marginTop="10dp"
+                android:ellipsize="end"
+                android:maxLength="50"
+                android:maxLines="3"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="Título da nota" />
+
+            <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/tvNoteDescription"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -37,7 +68,7 @@
                 android:textStyle="bold"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tvNoteTitle"
                 tools:text="Esta é uma anotação que foi escrita em uma anotação com o intuito de testas a quantidade de caracteres que a nota irá comportar e ver o design do card com muitos caracteres na descrição da nota" />
 
             <androidx.appcompat.widget.AppCompatImageView
@@ -65,5 +96,4 @@
                 tools:text="00/00/0000 - 10:00" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </com.google.android.material.card.MaterialCardView>
-
 </androidx.constraintlayout.widget.ConstraintLayout>
