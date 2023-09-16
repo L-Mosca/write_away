@@ -16,7 +16,7 @@ import br.com.writeaway.R
 import com.airbnb.lottie.LottieAnimationView
 
 enum class TransitionAnimation {
-    TRANSLATE_FROM_RIGHT, TRANSLATE_FROM_DOWN, TRANSLATE_FROM_LEFT, TRANSLATE_FROM_UP, NO_ANIMATION, FADE
+    TRANSLATE_FROM_RIGHT, TRANSLATE_FROM_DOWN, TRANSLATE_FROM_LEFT, TRANSLATE_FROM_UP, NO_ANIMATION, TRANSLATE_FROM_DOWN_POP, FADE
 }
 
 fun Fragment.navigate(
@@ -83,6 +83,13 @@ private fun buildOptions(
                     exit = R.anim.translate_fade_out
                     popEnter = R.anim.translate_fade_in
                     popExit = R.anim.translate_fade_out
+                }
+
+                TransitionAnimation.TRANSLATE_FROM_DOWN_POP -> {
+                    enter = R.anim.translate_slide_bottom_right
+                    exit = R.anim.translate_no_change
+                    popEnter = R.anim.translate_no_change
+                    popExit = R.anim.translate_slide_bottom_down
                 }
 
                 else -> {
