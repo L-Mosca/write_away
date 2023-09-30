@@ -17,6 +17,8 @@ class HomeViewModel @Inject constructor(private val noteRepository: NoteReposito
     val saveSuccess = MutableLiveData<Note>()
     val showBiometricView = MutableLiveData<Note>()
 
+    val layoutManager = MutableLiveData<String>()
+
     fun fetchNotes() {
         defaultLaunch {
             notes.postValue(noteRepository.fetchAllNotes())
@@ -49,5 +51,19 @@ class HomeViewModel @Inject constructor(private val noteRepository: NoteReposito
     fun blockedNoteClicked(note: Note) {
         if (note.isProtectedNote)
             showBiometricView.postValue(note)
+    }
+
+    fun fetchLayoutManager() {
+        defaultLaunch {
+            noteRepository.fetchLayoutManager().collect { layoutManager ->
+                this.layoutManager.postValue(layoutManager)
+            }
+        }
+    }
+
+    fun setLayoutManager(text: String) {
+        defaultLaunch {
+            noteRepository.setLayoutManager(text)
+        }
     }
 }

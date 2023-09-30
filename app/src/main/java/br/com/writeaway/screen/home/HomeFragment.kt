@@ -1,6 +1,7 @@
 package br.com.writeaway.screen.home
 
 import android.content.res.ColorStateList
+import android.util.Log
 import android.view.LayoutInflater
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
@@ -38,9 +39,16 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
             val direction = HomeFragmentDirections.actionHomeFragmentToCreateNoteFragment()
             navigate(direction, animation = TransitionAnimation.TRANSLATE_FROM_DOWN_POP)
         }
+
+        viewModel.fetchLayoutManager()
+        viewModel.setLayoutManager("teste do layout manager")
     }
 
     override fun initObservers() {
+        viewModel.layoutManager.observe(viewLifecycleOwner) { layoutManager ->
+            Log.e("Teste do layout manager", layoutManager)
+        }
+
         viewModel.showBiometricView.observe(viewLifecycleOwner) { note ->
             authenticateWithBiometrics(note)
         }

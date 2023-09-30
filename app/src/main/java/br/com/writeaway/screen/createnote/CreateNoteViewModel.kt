@@ -52,6 +52,7 @@ class CreateNoteViewModel @Inject constructor(private val noteRepository: NoteRe
                 title = noteTitle,
                 description = noteDescription,
                 date = Date(),
+                modifiedDate = Date(),
                 color = color,
                 isProtectedNote = noteHasPassword
             )
@@ -74,7 +75,7 @@ class CreateNoteViewModel @Inject constructor(private val noteRepository: NoteRe
             newNote.apply {
                 description = newDescription
                 color = newColor
-                date = Date()
+                modifiedDate = Date()
                 isProtectedNote = noteHasPassword
             }
             noteRepository.updateNote(newNote)
