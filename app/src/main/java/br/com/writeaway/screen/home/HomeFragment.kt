@@ -13,8 +13,11 @@ import br.com.writeaway.base.BaseFragment
 import br.com.writeaway.databinding.FragmentHomeBinding
 import br.com.writeaway.domain.models.Note
 import br.com.writeaway.screen.home.adapter.NoteAdapter
+import br.com.writeaway.util.AppConstants
 import br.com.writeaway.util.TransitionAnimation
+import br.com.writeaway.util.getLisViewValue
 import br.com.writeaway.util.navigate
+import br.com.writeaway.util.orderList
 import br.com.writeaway.util.setStatusBarColor
 import com.google.android.material.snackbar.Snackbar
 import com.google.gson.Gson
@@ -28,19 +31,28 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
     override val viewModel: HomeViewModel by viewModels()
 
     private val adapter: NoteAdapter by lazy { NoteAdapter() }
+    private var listOrder = AppConstants.ORDER_BY_UPDATE_DATE
 
     override fun initViews() {
-        binding.fabAddNote.imageTintList =
-            ColorStateList.valueOf(ContextCompat.getColor(requireContext(), R.color.white))
         binding.ivSettings.setOnClickListener { goToSettingsScreen() }
         setupAdapter()
-        binding.fabAddNote.setOnClickListener {
-            val direction = HomeFragmentDirections.actionHomeFragmentToCreateNoteFragment()
-            navigate(direction, animation = TransitionAnimation.TRANSLATE_FROM_DOWN_POP)
-        }
+        setupFab()
     }
 
     override fun initObservers() {
+        viewModel.textSize.observe(viewLifecycleOwner) { textSize ->
+            adapter.textSize = textSize
+        }
+
+        viewModel.orderType.observe(viewLifecycleOwner) { orderType ->
+            listOrder = orderType
+            viewModel.fetchNotes()
+        }
+
+        viewModel.layoutManager.observe(viewLifecycleOwner) { layoutManager ->
+            binding.rvNotes.layoutManager = layoutManager.getLisViewValue(requireContext())
+        }
+
         viewModel.showBiometricView.observe(viewLifecycleOwner) { note ->
             authenticateWithBiometrics(note)
         }
@@ -62,7 +74,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
 
         viewModel.notes.observe(viewLifecycleOwner) { noteList ->
             showEmptyPlaceHolder(noteList.isEmpty())
-            adapter.submitList(noteList)
+            adapter.submitList(noteList.orderList(listOrder))
         }
 
         viewModel.deleteSuccess.observe(viewLifecycleOwner) { note ->
@@ -91,6 +103,15 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
                 getString(R.string.default_error_message),
                 Toast.LENGTH_SHORT
             ).show()
+        }
+    }
+
+    private fun setupFab() {
+        binding.fabAddNote.imageTintList =
+            ColorStateList.valueOf(ContextCompat.getColor(requireContext(), R.color.white))
+        binding.fabAddNote.setOnClickListener {
+            val direction = HomeFragmentDirections.actionHomeFragmentToCreateNoteFragment()
+            navigate(direction, animation = TransitionAnimation.TRANSLATE_FROM_DOWN_POP)
         }
     }
 
@@ -167,7 +188,9 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
     override fun onResume() {
         super.onResume()
         setStatusBarColor(ContextCompat.getColor(requireContext(), R.color.white))
-        viewModel.fetchNotes()
+        //viewModel.fetchLayoutManager()
+        //viewModel.fetchTextSize()
+        viewModel.fetchOrderType()
     }
 
     override fun onDestroyView() {

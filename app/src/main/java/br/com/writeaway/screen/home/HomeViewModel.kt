@@ -4,11 +4,15 @@ import androidx.lifecycle.MutableLiveData
 import br.com.writeaway.base.BaseViewModel
 import br.com.writeaway.domain.models.Note
 import br.com.writeaway.domain.repositories.note.NoteRepositoryContract
+import br.com.writeaway.domain.repositories.settings.SettingsRepositoryContract
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
 @HiltViewModel
-class HomeViewModel @Inject constructor(private val noteRepository: NoteRepositoryContract) :
+class HomeViewModel @Inject constructor(
+    private val noteRepository: NoteRepositoryContract,
+    private val settingsRepository: SettingsRepositoryContract
+) :
     BaseViewModel() {
     val notes = MutableLiveData<List<Note>>()
     val deleteSuccess = MutableLiveData<Note?>()
@@ -17,9 +21,14 @@ class HomeViewModel @Inject constructor(private val noteRepository: NoteReposito
     val saveSuccess = MutableLiveData<Note>()
     val showBiometricView = MutableLiveData<Note>()
 
+    val textSize = MutableLiveData<Float>()
+    val layoutManager = MutableLiveData<String>()
+    val orderType = MutableLiveData<Int>()
+
     fun fetchNotes() {
         defaultLaunch {
-            notes.postValue(noteRepository.fetchAllNotes())
+            val noteList = noteRepository.fetchAllNotes()
+            notes.postValue(noteList)
         }
     }
 
@@ -49,5 +58,29 @@ class HomeViewModel @Inject constructor(private val noteRepository: NoteReposito
     fun blockedNoteClicked(note: Note) {
         if (note.isProtectedNote)
             showBiometricView.postValue(note)
+    }
+
+    fun fetchTextSize() {
+        defaultLaunch {
+            settingsRepository.fetchTextSize().collect { textSize ->
+                this.textSize.postValue(textSize)
+            }
+        }
+    }
+
+    fun fetchOrderType() {
+        defaultLaunch {
+            settingsRepository.fetchOrder().collect { orderType ->
+                this.orderType.postValue(orderType)
+            }
+        }
+    }
+
+    fun fetchLayoutManager() {
+        defaultLaunch {
+            settingsRepository.fetchLayoutManager().collect { layoutManager ->
+                this.layoutManager.postValue(layoutManager)
+            }
+        }
     }
 }

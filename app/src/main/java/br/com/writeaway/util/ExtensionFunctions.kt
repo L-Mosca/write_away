@@ -6,6 +6,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView.LayoutManager
 import br.com.writeaway.R
+import br.com.writeaway.domain.models.Note
 
 fun Float.getTextSizeLabel(context: Context): String {
     return when (this) {
@@ -61,5 +62,21 @@ fun String.getLisViewValue(context: Context): LayoutManager {
         )
 
         else -> LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+    }
+}
+
+fun List<Note>.orderList(orderType: Int): List<Note> {
+    return when (orderType) {
+        AppConstants.ORDER_BY_CREATE_DATE -> {
+            val sortedList = this.sortedByDescending { it.date }
+            sortedList
+        }
+
+        AppConstants.ORDER_BY_UPDATE_DATE -> {
+            val sortedList = this.sortedByDescending { it.modifiedDate }
+            sortedList
+        }
+
+        else -> this
     }
 }

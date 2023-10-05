@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/gray">
+    android:background="@color/white">
 
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/tvScreenTitle"
@@ -21,13 +21,13 @@
 
     <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/ivSettings"
-        app:srcCompat="@drawable/ic_settings"
         android:layout_width="28dp"
         android:layout_height="28dp"
         android:layout_marginEnd="16dp"
+        app:layout_constraintBottom_toBottomOf="@id/tvScreenTitle"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@id/tvScreenTitle"
-        app:layout_constraintBottom_toBottomOf="@id/tvScreenTitle" />
+        app:srcCompat="@drawable/ic_settings" />
 
     <androidx.core.widget.NestedScrollView
         android:id="@+id/nscList"
@@ -57,16 +57,6 @@
                 tools:listitem="@layout/adapter_note" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.core.widget.NestedScrollView>
-
-    <!--<include
-        android:id="@+id/includeEmptyList"
-        layout="@layout/empty_list_placeholder"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />-->
 
     <ViewStub
         android:id="@+id/stub"
