@@ -3,7 +3,7 @@ package br.com.writeaway.screen.home
 import androidx.lifecycle.MutableLiveData
 import br.com.writeaway.base.BaseViewModel
 import br.com.writeaway.domain.models.Note
-import br.com.writeaway.domain.repositories.NoteRepositoryContract
+import br.com.writeaway.domain.repositories.note.NoteRepositoryContract
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 

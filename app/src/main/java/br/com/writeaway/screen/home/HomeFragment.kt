@@ -13,6 +13,7 @@ import br.com.writeaway.base.BaseFragment
 import br.com.writeaway.databinding.FragmentHomeBinding
 import br.com.writeaway.domain.models.Note
 import br.com.writeaway.screen.home.adapter.NoteAdapter
+import br.com.writeaway.util.TransitionAnimation
 import br.com.writeaway.util.navigate
 import br.com.writeaway.util.setStatusBarColor
 import com.google.android.material.snackbar.Snackbar
@@ -29,11 +30,13 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
     private val adapter: NoteAdapter by lazy { NoteAdapter() }
 
     override fun initViews() {
-        binding.fabAddNote.imageTintList = ColorStateList.valueOf(resources.getColor(R.color.white))
+        binding.fabAddNote.imageTintList =
+            ColorStateList.valueOf(ContextCompat.getColor(requireContext(), R.color.white))
+        binding.ivSettings.setOnClickListener { goToSettingsScreen() }
         setupAdapter()
         binding.fabAddNote.setOnClickListener {
             val direction = HomeFragmentDirections.actionHomeFragmentToCreateNoteFragment()
-            navigate(direction)
+            navigate(direction, animation = TransitionAnimation.TRANSLATE_FROM_DOWN_POP)
         }
     }
 
@@ -97,7 +100,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
             val direction = HomeFragmentDirections.actionHomeFragmentToCreateNoteFragment(
                 note = Gson().toJson(note)
             )
-            navigate(direction)
+            navigate(direction, animation = TransitionAnimation.TRANSLATE_FROM_DOWN_POP)
         }
         adapter.onDeleteClicked = { note -> viewModel.deleteNote(note) }
         binding.rvNotes.adapter = adapter
@@ -154,6 +157,11 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
         }
         val dialog = builder.create()
         dialog.show()
+    }
+
+    private fun goToSettingsScreen() {
+        val direction = HomeFragmentDirections.actionHomeFragmentToSettingsFragment()
+        navigate(direction)
     }
 
     override fun onResume() {

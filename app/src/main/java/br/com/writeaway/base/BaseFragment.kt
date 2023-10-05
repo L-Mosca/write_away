@@ -1,12 +1,14 @@
 package br.com.writeaway.base
 
 import android.os.Bundle
+import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.addCallback
 import androidx.annotation.StringRes
+import androidx.appcompat.widget.PopupMenu
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.viewbinding.ViewBinding
@@ -86,6 +88,35 @@ abstract class BaseFragment<VB : ViewBinding> : Fragment() {
         }
     }
 
+    /**
+     * Shows a PopupMenu
+     *
+     * @param anchorView View that the PopupMenu will be anchored to
+     * @param customLogic Use this to add the desired options to your PopupMenu as well
+     * as the action to be performed after those options are clicked
+     *
+     */
+    fun showPopupMenu(anchorView: View, customLogic: (popupMenu: PopupMenu) -> Unit) {
+        val popupMenu = PopupMenu(
+            requireContext(),
+            anchorView,
+            Gravity.END,
+            androidx.appcompat.R.attr.popupMenuStyle,
+            R.style.Base_PopupMenu
+        )
+
+        customLogic.invoke(popupMenu)
+
+        try {
+            val fieldPopup = PopupMenu::class.java.getDeclaredField("mPopup")
+            fieldPopup.isAccessible = true
+            popupMenu.show()
+        } catch (exception: Exception) {
+            exception.printStackTrace()
+        } finally {
+            popupMenu.show()
+        }
+    }
 
     private fun showToast(message: String, duration: Int) {
         currentToast?.cancel()

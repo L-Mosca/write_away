@@ -1,12 +1,16 @@
-package br.com.writeaway.domain.repositories
+package br.com.writeaway.domain.repositories.note
 
 import android.app.Application
 import br.com.writeaway.WriteAwayApp
+import br.com.writeaway.domain.local.PreferencesContract
 import br.com.writeaway.domain.models.Note
+import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
-class NoteRepository @Inject constructor(private val application: Application) :
-    NoteRepositoryContract {
+class NoteRepository @Inject constructor(
+    private val application: Application,
+    private val dataStore: PreferencesContract
+) : NoteRepositoryContract {
 
     override suspend fun fetchAllNotes(): List<Note> {
         val app = application as WriteAwayApp
@@ -34,4 +38,9 @@ class NoteRepository @Inject constructor(private val application: Application) :
         dao.deleteNote(note.id)
     }
 
+    override suspend fun fetchLayoutManager(): Flow<String> =
+        dataStore.getLayoutManagerMode()
+
+    override suspend fun setLayoutManager(text: String) =
+        dataStore.setLayoutManagerMode(text = text)
 }

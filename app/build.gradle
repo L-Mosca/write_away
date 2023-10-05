@@ -9,7 +9,7 @@ plugins {
 
 android {
     namespace 'br.com.writeaway'
-    compileSdk 33
+    compileSdk 34
 
     defaultConfig {
         applicationId "br.com.writeaway"
@@ -38,11 +38,28 @@ android {
             signingConfig release.signingConfig
         }
     }
+
+    flavorDimensions "dev", "prod"
+    productFlavors {
+        dev {
+            applicationIdSuffix '.dev'
+            resValue "string", "app_name", "[Dev] Write Away"
+            dimension 'dev'
+            buildConfigField("String", "NAME", "\"Write Away Develop\"")
+        }
+        prod {
+            resValue "string", "app_name", "Write Away"
+            dimension 'prod'
+            buildConfigField("String", "NAME", "\"Write Away\"")
+        }
+    }
+
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_17
         targetCompatibility JavaVersion.VERSION_17
     }
     buildFeatures {
+        buildConfig true
         viewBinding true
     }
     kotlinOptions {
@@ -51,7 +68,7 @@ android {
 }
 
 dependencies {
-    implementation 'androidx.core:core-ktx:1.10.1'
+    implementation 'androidx.core:core-ktx:1.12.0'
     implementation 'androidx.appcompat:appcompat:1.6.1'
     implementation 'com.google.android.material:material:1.9.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
@@ -60,20 +77,20 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
 
     // Navigation
-    implementation "androidx.navigation:navigation-fragment-ktx:2.6.0"
-    implementation "androidx.navigation:navigation-ui-ktx:2.6.0"
-    implementation "androidx.navigation:navigation-dynamic-features-fragment:2.6.0"
-    androidTestImplementation "androidx.navigation:navigation-testing:2.6.0"
+    implementation "androidx.navigation:navigation-fragment-ktx:2.7.2"
+    implementation "androidx.navigation:navigation-ui-ktx:2.7.2"
+    implementation "androidx.navigation:navigation-dynamic-features-fragment:2.7.2"
+    androidTestImplementation "androidx.navigation:navigation-testing:2.7.2"
 
     // Hilt
     implementation "com.google.dagger:hilt-android:2.44"
     kapt "com.google.dagger:hilt-compiler:2.44"
 
     // Live Data
-    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.1"
-    implementation "androidx.lifecycle:lifecycle-livedata-ktx:2.6.1"
+    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.2"
+    implementation "androidx.lifecycle:lifecycle-livedata-ktx:2.6.2"
 
-    implementation 'androidx.constraintlayout:constraintlayout:2.2.0-alpha10'
+    implementation 'androidx.constraintlayout:constraintlayout:2.2.0-alpha12'
 
     // Native Splash Screen Google Api
     implementation 'androidx.core:core-splashscreen:1.0.1'
@@ -97,4 +114,8 @@ dependencies {
     // Biometric Manager
     implementation "androidx.biometric:biometric-ktx:1.2.0-alpha05"
 
+    // Preferences DataStore
+    implementation "androidx.datastore:datastore-preferences:1.0.0"
+    implementation "androidx.datastore:datastore-preferences-rxjava2:1.0.0"
+    implementation "androidx.datastore:datastore-preferences-rxjava3:1.0.0"
 }

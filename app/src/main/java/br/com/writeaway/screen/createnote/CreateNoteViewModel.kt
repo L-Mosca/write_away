@@ -3,7 +3,7 @@ package br.com.writeaway.screen.createnote
 import androidx.lifecycle.MutableLiveData
 import br.com.writeaway.base.BaseViewModel
 import br.com.writeaway.domain.models.Note
-import br.com.writeaway.domain.repositories.NoteRepositoryContract
+import br.com.writeaway.domain.repositories.note.NoteRepositoryContract
 import com.google.gson.Gson
 import dagger.hilt.android.lifecycle.HiltViewModel
 import java.util.Date
@@ -52,6 +52,7 @@ class CreateNoteViewModel @Inject constructor(private val noteRepository: NoteRe
                 title = noteTitle,
                 description = noteDescription,
                 date = Date(),
+                modifiedDate = Date(),
                 color = color,
                 isProtectedNote = noteHasPassword
             )
@@ -74,7 +75,7 @@ class CreateNoteViewModel @Inject constructor(private val noteRepository: NoteRe
             newNote.apply {
                 description = newDescription
                 color = newColor
-                date = Date()
+                modifiedDate = Date()
                 isProtectedNote = noteHasPassword
             }
             noteRepository.updateNote(newNote)
