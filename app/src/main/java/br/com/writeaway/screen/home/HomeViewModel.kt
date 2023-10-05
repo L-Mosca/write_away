@@ -3,7 +3,7 @@ package br.com.writeaway.screen.home
 import androidx.lifecycle.MutableLiveData
 import br.com.writeaway.base.BaseViewModel
 import br.com.writeaway.domain.models.Note
-import br.com.writeaway.domain.repositories.NoteRepositoryContract
+import br.com.writeaway.domain.repositories.note.NoteRepositoryContract
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
@@ -16,8 +16,6 @@ class HomeViewModel @Inject constructor(private val noteRepository: NoteReposito
     val saveError = MutableLiveData<Unit>()
     val saveSuccess = MutableLiveData<Note>()
     val showBiometricView = MutableLiveData<Note>()
-
-    val layoutManager = MutableLiveData<String>()
 
     fun fetchNotes() {
         defaultLaunch {
@@ -51,19 +49,5 @@ class HomeViewModel @Inject constructor(private val noteRepository: NoteReposito
     fun blockedNoteClicked(note: Note) {
         if (note.isProtectedNote)
             showBiometricView.postValue(note)
-    }
-
-    fun fetchLayoutManager() {
-        defaultLaunch {
-            noteRepository.fetchLayoutManager().collect { layoutManager ->
-                this.layoutManager.postValue(layoutManager)
-            }
-        }
-    }
-
-    fun setLayoutManager(text: String) {
-        defaultLaunch {
-            noteRepository.setLayoutManager(text)
-        }
     }
 }

@@ -13,11 +13,25 @@
     <string name="delete_note_success">Nota deletada com sucesso</string>
     <string name="undo">Desfazer</string>
     <string name="empty_list">Nenhuma anotação encontrada</string>
+
     <string name="unlock">Desbloqueie</string>
     <string name="protect_note">Proteger nota com senha</string>
     <string name="biometric_authenticate_title">Autenticação Requerida</string>
     <string name="biometric_authenticate_message">Realize a autenticação para ver/editar a nota</string>
     <string name="cancel">Cancelar</string>
     <string name="blocked_note">Nota Bloqueada</string>
+
     <string name="add_note_title">Título da nota</string>
+    <string name="style">ESTILO</string>
+    <string name="textSize">Tamanho do texto</string>
+    <string name="order">Ordenar</string>
+    <string name="layout">Layout</string>
+    <string name="createDate">Por data de criação</string>
+    <string name="modificationDate">Por data de modificação</string>
+    <string name="small">Pequeno</string>
+    <string name="medium">Médio</string>
+    <string name="large">Grande</string>
+    <string name="extraLarge">Extra grande</string>
+    <string name="viewInList">Visualização em lista</string>
+    <string name="viewInGrid">Visualização em grade</string>
 </resources>

@@ -1,6 +1,5 @@
-package br.com.writeaway.domain.repositories
+package br.com.writeaway.domain.repositories.note
 
-import androidx.lifecycle.LiveData
 import br.com.writeaway.domain.models.Note
 import kotlinx.coroutines.flow.Flow
 

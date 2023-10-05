@@ -6,16 +6,22 @@
         <item name="android:statusBarColor">@android:color/transparent</item>
         <item name="android:windowLightStatusBar">true</item>
 
-        <item name="floatingActionButtonStyle">@style/WriteAwayFloatingButtonStyle</item>
+        <item name="floatingActionButtonStyle">@style/Base.FloatingButton</item>
+        <item name="popupMenuStyle">@style/Base.PopupMenu</item>
     </style>
 
     <style name="Theme.WriteAway" parent="Base.Theme.WriteAway" />
 
-    <style name="WriteAwayFloatingButtonStyle" parent="Widget.Design.FloatingActionButton">
+    <style name="Base.FloatingButton" parent="Widget.Design.FloatingActionButton">
         <item name="android:elevation">6dp</item>
         <item name="borderWidth">2dp</item>
         <item name="backgroundTint">@color/yellow</item>
         <item name="tint">@color/white</item>
         <item name="strokeColor">@color/black</item>
     </style>
+
+    <style name="Base.PopupMenu" parent="Widget.AppCompat.PopupMenu">
+        <item name="android:popupBackground">@drawable/popup_menu_background</item>
+    </style>
+
 </resources>

@@ -1,14 +1,10 @@
-package br.com.writeaway.domain.repositories
+package br.com.writeaway.domain.repositories.note
 
 import android.app.Application
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.asLiveData
 import br.com.writeaway.WriteAwayApp
 import br.com.writeaway.domain.local.PreferencesContract
 import br.com.writeaway.domain.models.Note
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
-import okhttp3.Dispatcher
 import javax.inject.Inject
 
 class NoteRepository @Inject constructor(
@@ -42,12 +38,9 @@ class NoteRepository @Inject constructor(
         dao.deleteNote(note.id)
     }
 
-    override suspend fun fetchLayoutManager(): Flow<String> {
-        return dataStore.getLayoutManagerMode()
-    }
+    override suspend fun fetchLayoutManager(): Flow<String> =
+        dataStore.getLayoutManagerMode()
 
-    override suspend fun setLayoutManager(text: String) {
+    override suspend fun setLayoutManager(text: String) =
         dataStore.setLayoutManagerMode(text = text)
-    }
-
 }
