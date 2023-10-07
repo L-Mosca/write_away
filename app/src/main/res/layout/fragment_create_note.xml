@@ -7,19 +7,6 @@
     android:layout_height="match_parent"
     android:background="@color/note_yellow">
 
-    <com.google.android.material.textview.MaterialTextView
-        android:id="@+id/tvNewNote"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginHorizontal="20dp"
-        android:layout_marginTop="20dp"
-        android:text="@string/new_note"
-        android:textSize="24sp"
-        android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
     <androidx.appcompat.widget.LinearLayoutCompat
         android:id="@+id/llColorList"
         android:layout_width="match_parent"
@@ -30,7 +17,7 @@
         android:orientation="horizontal"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tvNewNote">
+        app:layout_constraintTop_toTopOf="parent">
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rvColors"
@@ -53,6 +40,7 @@
         android:layout_marginTop="20dp"
         android:text="@string/protect_note"
         android:textSize="16sp"
+        android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/llColorList" />
@@ -67,12 +55,47 @@
         android:hint="@string/add_note_title"
         android:imeOptions="actionNext"
         android:inputType="textMultiLine"
-        android:maxLength="50"
         android:minHeight="48dp"
         android:textSize="20sp"
+        android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/swProtectNote" />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/tvDate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="6dp"
+        android:textSize="12sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toStartOf="@id/vDivider"
+        app:layout_constraintStart_toStartOf="@id/etNoteTitle"
+        app:layout_constraintTop_toBottomOf="@id/etNoteTitle"
+        tools:text="7 de outubro 10:00" />
+
+    <View
+        android:id="@+id/vDivider"
+        android:layout_width="1dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="10dp"
+        android:background="@color/black"
+        app:layout_constraintBottom_toBottomOf="@id/tvDate"
+        app:layout_constraintStart_toEndOf="@id/tvDate"
+        app:layout_constraintTop_toTopOf="@id/tvDate" />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/tvCharacters"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:textSize="12sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@id/tvDate"
+        app:layout_constraintEnd_toEndOf="@id/etNoteTitle"
+        app:layout_constraintStart_toEndOf="@id/vDivider"
+        app:layout_constraintTop_toTopOf="@id/tvDate"
+        tools:text="0 caractere" />
 
     <com.google.android.material.textfield.TextInputEditText
         android:id="@+id/etNoteDescription"
@@ -87,7 +110,7 @@
         android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/etNoteTitle" />
+        app:layout_constraintTop_toBottomOf="@id/tvDate" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fabSaveNote"

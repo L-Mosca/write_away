@@ -20,7 +20,6 @@ import javax.inject.Inject
 class PreferencesDataStore @Inject constructor(@ApplicationContext val context: Context) :
     PreferencesContract {
 
-
     companion object {
         private const val PREFERENCES_NAME =
             "${BuildConfig.NAME}.${BuildConfig.FLAVOR}.DataStore.WriteAway"

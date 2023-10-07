@@ -1,27 +1,32 @@
 package br.com.writeaway.screen.createnote
 
+import android.animation.ArgbEvaluator
 import android.animation.ValueAnimator
+import android.annotation.SuppressLint
+import android.text.Editable
 import android.view.LayoutInflater
+import android.widget.Toast
+import androidx.core.content.ContextCompat
+import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import br.com.writeaway.R
 import br.com.writeaway.base.BaseFragment
 import br.com.writeaway.databinding.FragmentCreateNoteBinding
-import br.com.writeaway.screen.createnote.adapter.ColorAdapter
-import dagger.hilt.android.AndroidEntryPoint
-import android.animation.ArgbEvaluator
-import android.annotation.SuppressLint
-import android.text.Editable
-import android.widget.Toast
-import androidx.core.content.ContextCompat
-import androidx.core.view.isVisible
-import androidx.navigation.fragment.navArgs
 import br.com.writeaway.domain.models.Note
-import br.com.writeaway.util.hasDevicePassword
+import br.com.writeaway.screen.createnote.adapter.ColorAdapter
+import br.com.writeaway.util.getDefaultTextSize
+import br.com.writeaway.util.getDetailTextSize
+import br.com.writeaway.util.getTitleTextSize
 import br.com.writeaway.util.hideKeyboard
 import br.com.writeaway.util.setStatusBarColor
 import br.com.writeaway.util.showKeyboard
 import com.google.gson.Gson
+import dagger.hilt.android.AndroidEntryPoint
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 
 @AndroidEntryPoint
 class CreateNoteFragment : BaseFragment<FragmentCreateNoteBinding>() {
@@ -36,13 +41,21 @@ class CreateNoteFragment : BaseFragment<FragmentCreateNoteBinding>() {
     override fun initViews() {
         noteData = Gson().fromJson(args.note, Note::class.java)
         viewModel.setInitialData(noteData)
-        setupAdapter()
+        viewModel.fetchTextSize()
         binding.fabSaveNote.setOnClickListener { onFabClicked() }
+        setupAdapter()
         //binding.swProtectNote.isVisible = hasDevicePassword()
-        binding.swProtectNote.isVisible = true
     }
 
     override fun initObservers() {
+        viewModel.textSize.observe(viewLifecycleOwner) { textSize ->
+            setupTextSize(textSize)
+        }
+
+        viewModel.characterQuantity.observe(viewLifecycleOwner) { textLength ->
+            binding.tvCharacters.text = getString(R.string.character, textLength)
+        }
+
         viewModel.saveError.observe(viewLifecycleOwner) {
             Toast.makeText(
                 requireContext(),
@@ -72,6 +85,8 @@ class CreateNoteFragment : BaseFragment<FragmentCreateNoteBinding>() {
             binding.etNoteTitle.requestFocus()
             showKeyboard(binding.etNoteDescription)
             setStatusBarColor(ContextCompat.getColor(requireContext(), R.color.note_yellow))
+            setupDescription(0)
+            setupDate(Date())
         }
 
         viewModel.initialData.observe(viewLifecycleOwner) { note ->
@@ -102,6 +117,8 @@ class CreateNoteFragment : BaseFragment<FragmentCreateNoteBinding>() {
         adapter.oldColor = note.color
         setStatusBarColor(note.color)
         binding.swProtectNote.isChecked = note.isProtectedNote
+        setupDescription(note.description.length)
+        setupDate(note.date)
     }
 
     private fun setupAdapter() {
@@ -156,5 +173,29 @@ class CreateNoteFragment : BaseFragment<FragmentCreateNoteBinding>() {
             noteHasPassword = binding.swProtectNote.isChecked
         )
         hideKeyboard()
+    }
+
+    private fun setupDescription(textLength: Int?) {
+        binding.tvCharacters.text = getString(R.string.character, textLength ?: 0)
+        binding.etNoteDescription.addTextChangedListener {
+            viewModel.setCharacterQuantity(it?.length ?: 0)
+        }
+    }
+
+    private fun setupDate(date: Date?) {
+        binding.tvDate.text =
+            SimpleDateFormat(
+                "d '${getString(R.string.of)}' MMMM HH:mm",
+                Locale.getDefault()
+            ).format(date ?: Date())
+    }
+
+    private fun setupTextSize(textSize: Float) {
+        with(binding) {
+            tvDate.textSize = textSize.getDetailTextSize()
+            tvCharacters.textSize = textSize.getDetailTextSize()
+            etNoteTitle.textSize = textSize.getTitleTextSize()
+            etNoteDescription.textSize = textSize.getDefaultTextSize()
+        }
     }
 }

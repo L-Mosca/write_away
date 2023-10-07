@@ -5,6 +5,7 @@ import android.view.View
 import androidx.appcompat.widget.PopupMenu
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import br.com.writeaway.R
 import br.com.writeaway.base.BaseFragment
 import br.com.writeaway.databinding.FragmentSettingsBinding
@@ -26,8 +27,7 @@ class SettingsFragment : BaseFragment<FragmentSettingsBinding>() {
         viewModel.fetchLayoutManager()
 
         configSettingsStyle()
-
-
+        binding.ivBack.setOnClickListener { findNavController().popBackStack() }
     }
 
     override fun initObservers() {

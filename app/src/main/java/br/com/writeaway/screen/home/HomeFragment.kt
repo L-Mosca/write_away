@@ -1,6 +1,7 @@
 package br.com.writeaway.screen.home
 
 import android.content.res.ColorStateList
+import android.util.Log
 import android.view.LayoutInflater
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
@@ -8,13 +9,17 @@ import androidx.biometric.BiometricPrompt
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
+import androidx.recyclerview.widget.GridLayoutManager
 import br.com.writeaway.R
 import br.com.writeaway.base.BaseFragment
 import br.com.writeaway.databinding.FragmentHomeBinding
 import br.com.writeaway.domain.models.Note
 import br.com.writeaway.screen.home.adapter.NoteAdapter
+import br.com.writeaway.util.AppConstants
 import br.com.writeaway.util.TransitionAnimation
+import br.com.writeaway.util.getLisViewValue
 import br.com.writeaway.util.navigate
+import br.com.writeaway.util.orderList
 import br.com.writeaway.util.setStatusBarColor
 import com.google.android.material.snackbar.Snackbar
 import com.google.gson.Gson
@@ -28,19 +33,30 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
     override val viewModel: HomeViewModel by viewModels()
 
     private val adapter: NoteAdapter by lazy { NoteAdapter() }
+    private var listOrder = AppConstants.ORDER_BY_UPDATE_DATE
 
     override fun initViews() {
-        binding.fabAddNote.imageTintList =
-            ColorStateList.valueOf(ContextCompat.getColor(requireContext(), R.color.white))
         binding.ivSettings.setOnClickListener { goToSettingsScreen() }
         setupAdapter()
-        binding.fabAddNote.setOnClickListener {
-            val direction = HomeFragmentDirections.actionHomeFragmentToCreateNoteFragment()
-            navigate(direction, animation = TransitionAnimation.TRANSLATE_FROM_DOWN_POP)
-        }
+        setupFab()
     }
 
     override fun initObservers() {
+        viewModel.textSize.observe(viewLifecycleOwner) { textSize ->
+            adapter.textSize = textSize
+        }
+
+        viewModel.orderType.observe(viewLifecycleOwner) { orderType ->
+            listOrder = orderType
+            viewModel.fetchLayoutManager()
+        }
+
+        viewModel.layoutManager.observe(viewLifecycleOwner) { layoutManager ->
+            Log.e("TESTE LAYOUT MANAGER", layoutManager.toString())
+            binding.rvNotes.layoutManager = layoutManager.getLisViewValue(requireContext())
+            viewModel.fetchNotes()
+        }
+
         viewModel.showBiometricView.observe(viewLifecycleOwner) { note ->
             authenticateWithBiometrics(note)
         }
@@ -62,7 +78,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
 
         viewModel.notes.observe(viewLifecycleOwner) { noteList ->
             showEmptyPlaceHolder(noteList.isEmpty())
-            adapter.submitList(noteList)
+            adapter.submitList(noteList.orderList(listOrder))
         }
 
         viewModel.deleteSuccess.observe(viewLifecycleOwner) { note ->
@@ -94,6 +110,15 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
         }
     }
 
+    private fun setupFab() {
+        binding.fabAddNote.imageTintList =
+            ColorStateList.valueOf(ContextCompat.getColor(requireContext(), R.color.white))
+        binding.fabAddNote.setOnClickListener {
+            val direction = HomeFragmentDirections.actionHomeFragmentToCreateNoteFragment()
+            navigate(direction, animation = TransitionAnimation.TRANSLATE_FROM_DOWN_POP)
+        }
+    }
+
     private fun setupAdapter() {
         adapter.onLockClicked = { note -> viewModel.blockedNoteClicked(note) }
         adapter.onNoteClicked = { note ->
@@ -103,6 +128,8 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
             navigate(direction, animation = TransitionAnimation.TRANSLATE_FROM_DOWN_POP)
         }
         adapter.onDeleteClicked = { note -> viewModel.deleteNote(note) }
+
+        binding.rvNotes.layoutManager = GridLayoutManager(requireContext(), 2)
         binding.rvNotes.adapter = adapter
     }
 
@@ -167,7 +194,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
     override fun onResume() {
         super.onResume()
         setStatusBarColor(ContextCompat.getColor(requireContext(), R.color.white))
-        viewModel.fetchNotes()
+        viewModel.fetchOrderType()
     }
 
     override fun onDestroyView() {
