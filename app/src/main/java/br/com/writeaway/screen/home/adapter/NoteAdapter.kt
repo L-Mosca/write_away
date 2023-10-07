@@ -3,13 +3,11 @@ package br.com.writeaway.screen.home.adapter
 import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.core.view.isVisible
 import androidx.recyclerview.widget.DiffUtil
 import br.com.writeaway.base.BaseListAdapter
 import br.com.writeaway.base.ViewHolder
 import br.com.writeaway.databinding.AdapterNoteBinding
 import br.com.writeaway.domain.models.Note
-import br.com.writeaway.util.AppConstants
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale

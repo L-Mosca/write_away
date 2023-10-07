@@ -4,13 +4,17 @@ import androidx.lifecycle.MutableLiveData
 import br.com.writeaway.base.BaseViewModel
 import br.com.writeaway.domain.models.Note
 import br.com.writeaway.domain.repositories.note.NoteRepositoryContract
+import br.com.writeaway.domain.repositories.settings.SettingsRepositoryContract
 import com.google.gson.Gson
 import dagger.hilt.android.lifecycle.HiltViewModel
 import java.util.Date
 import javax.inject.Inject
 
 @HiltViewModel
-class CreateNoteViewModel @Inject constructor(private val noteRepository: NoteRepositoryContract) :
+class CreateNoteViewModel @Inject constructor(
+    private val noteRepository: NoteRepositoryContract,
+    private val settingsRepository: SettingsRepositoryContract
+) :
     BaseViewModel() {
 
     val saveSuccess = MutableLiveData<Unit>()
@@ -20,6 +24,8 @@ class CreateNoteViewModel @Inject constructor(private val noteRepository: NoteRe
     val initialData = MutableLiveData<Note?>()
     val editTextFocus = MutableLiveData<Unit>()
     val updateError = MutableLiveData<Unit>()
+    val characterQuantity = MutableLiveData<Int>()
+    val textSize = MutableLiveData<Float>()
 
     fun submitNote(
         noteTitle: String,
@@ -89,5 +95,17 @@ class CreateNoteViewModel @Inject constructor(private val noteRepository: NoteRe
         } else {
             editTextFocus.postValue(Unit)
         }
+    }
+
+    fun fetchTextSize() {
+        defaultLaunch {
+            settingsRepository.fetchTextSize().collect { textSize ->
+                this.textSize.postValue(textSize)
+            }
+        }
+    }
+
+    fun setCharacterQuantity(textLength: Int) {
+        characterQuantity.postValue(textLength)
     }
 }

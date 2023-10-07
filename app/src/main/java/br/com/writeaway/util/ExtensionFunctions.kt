@@ -32,8 +32,7 @@ fun Int.getOrderTypeLabel(context: Context): String {
     return when (this) {
         AppConstants.ORDER_BY_CREATE_DATE -> ContextCompat.getString(context, R.string.createDate)
         AppConstants.ORDER_BY_UPDATE_DATE -> ContextCompat.getString(
-            context,
-            R.string.modificationDate
+            context, R.string.modificationDate
         )
 
         else -> ContextCompat.getString(context, R.string.modificationDate)
@@ -44,8 +43,7 @@ fun String.getOrderTypeValue(context: Context): Int {
     return when (this) {
         ContextCompat.getString(context, R.string.createDate) -> AppConstants.ORDER_BY_CREATE_DATE
         ContextCompat.getString(
-            context,
-            R.string.modificationDate
+            context, R.string.modificationDate
         ) -> AppConstants.ORDER_BY_UPDATE_DATE
 
         else -> AppConstants.ORDER_BY_UPDATE_DATE
@@ -56,9 +54,7 @@ fun String.getLisViewValue(context: Context): LayoutManager {
     return when (this) {
         ContextCompat.getString(context, R.string.viewInGrid) -> GridLayoutManager(context, 2)
         ContextCompat.getString(context, R.string.viewInList) -> LinearLayoutManager(
-            context,
-            LinearLayoutManager.VERTICAL,
-            false
+            context, LinearLayoutManager.VERTICAL, false
         )
 
         else -> LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
@@ -78,5 +74,35 @@ fun List<Note>.orderList(orderType: Int): List<Note> {
         }
 
         else -> this
+    }
+}
+
+fun Float.getTitleTextSize(): Float {
+    return when (this) {
+        AppConstants.TEXT_SIZE_SMALL -> 18f
+        AppConstants.TEXT_SIZE_MEDIUM -> 20f
+        AppConstants.TEXT_SIZE_LARGE -> 22f
+        AppConstants.TEXT_SIZE_EXTRA_LARGE -> 24f
+        else -> 20f
+    }
+}
+
+fun Float.getDefaultTextSize(): Float {
+    return when (this) {
+        AppConstants.TEXT_SIZE_SMALL -> 14f
+        AppConstants.TEXT_SIZE_MEDIUM -> 16f
+        AppConstants.TEXT_SIZE_LARGE -> 18f
+        AppConstants.TEXT_SIZE_EXTRA_LARGE -> 20f
+        else -> 16f
+    }
+}
+
+fun Float.getDetailTextSize(): Float {
+    return when (this) {
+        AppConstants.TEXT_SIZE_SMALL -> 10f
+        AppConstants.TEXT_SIZE_MEDIUM -> 12f
+        AppConstants.TEXT_SIZE_LARGE -> 14f
+        AppConstants.TEXT_SIZE_EXTRA_LARGE -> 16f
+        else -> 14f
     }
 }
