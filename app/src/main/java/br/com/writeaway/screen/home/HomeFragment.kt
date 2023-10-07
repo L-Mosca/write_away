@@ -1,6 +1,7 @@
 package br.com.writeaway.screen.home
 
 import android.content.res.ColorStateList
+import android.util.Log
 import android.view.LayoutInflater
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
@@ -8,6 +9,7 @@ import androidx.biometric.BiometricPrompt
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
+import androidx.recyclerview.widget.GridLayoutManager
 import br.com.writeaway.R
 import br.com.writeaway.base.BaseFragment
 import br.com.writeaway.databinding.FragmentHomeBinding
@@ -46,11 +48,13 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
 
         viewModel.orderType.observe(viewLifecycleOwner) { orderType ->
             listOrder = orderType
-            viewModel.fetchNotes()
+            viewModel.fetchLayoutManager()
         }
 
         viewModel.layoutManager.observe(viewLifecycleOwner) { layoutManager ->
+            Log.e("TESTE LAYOUT MANAGER", layoutManager.toString())
             binding.rvNotes.layoutManager = layoutManager.getLisViewValue(requireContext())
+            viewModel.fetchNotes()
         }
 
         viewModel.showBiometricView.observe(viewLifecycleOwner) { note ->
@@ -124,6 +128,8 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
             navigate(direction, animation = TransitionAnimation.TRANSLATE_FROM_DOWN_POP)
         }
         adapter.onDeleteClicked = { note -> viewModel.deleteNote(note) }
+
+        binding.rvNotes.layoutManager = GridLayoutManager(requireContext(), 2)
         binding.rvNotes.adapter = adapter
     }
 
@@ -188,8 +194,6 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
     override fun onResume() {
         super.onResume()
         setStatusBarColor(ContextCompat.getColor(requireContext(), R.color.white))
-        //viewModel.fetchLayoutManager()
-        //viewModel.fetchTextSize()
         viewModel.fetchOrderType()
     }
 
