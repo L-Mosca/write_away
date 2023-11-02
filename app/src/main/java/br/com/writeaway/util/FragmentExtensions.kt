@@ -2,13 +2,10 @@ package br.com.writeaway.util
 
 import android.app.KeyguardManager
 import android.content.Context
-import android.view.Gravity
 import android.view.View
 import android.view.WindowManager
 import android.view.inputmethod.InputMethodManager
 import androidx.annotation.IdRes
-import androidx.appcompat.widget.PopupMenu
-import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.fragment.app.Fragment
 import androidx.navigation.NavDirections
 import androidx.navigation.NavOptions

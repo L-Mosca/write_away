@@ -27,7 +27,7 @@
         app:layout_constraintBottom_toBottomOf="@id/tvScreenTitle"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@id/tvScreenTitle"
-        app:srcCompat="@drawable/ic_settings" />
+        android:src="@drawable/ic_settings" />
 
     <androidx.core.widget.NestedScrollView
         android:id="@+id/nscList"

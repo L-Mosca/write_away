@@ -1,6 +1,7 @@
 package br.com.writeaway.screen.home
 
 import androidx.lifecycle.MutableLiveData
+import br.com.writeaway.R
 import br.com.writeaway.base.BaseViewModel
 import br.com.writeaway.domain.models.Note
 import br.com.writeaway.domain.repositories.note.NoteRepositoryContract
@@ -20,6 +21,8 @@ class HomeViewModel @Inject constructor(
     val saveError = MutableLiveData<Unit>()
     val saveSuccess = MutableLiveData<Note>()
     val showBiometricView = MutableLiveData<Note>()
+    val setSelectionMode = MutableLiveData<Unit>()
+    val switchTopRightButton = MutableLiveData<Int>()
 
     val textSize = MutableLiveData<Float>()
     val layoutManager = MutableLiveData<String>()
@@ -60,14 +63,6 @@ class HomeViewModel @Inject constructor(
             showBiometricView.postValue(note)
     }
 
-    fun fetchTextSize() {
-        defaultLaunch {
-            settingsRepository.fetchTextSize().collect { textSize ->
-                this.textSize.postValue(textSize)
-            }
-        }
-    }
-
     fun fetchOrderType() {
         defaultLaunch {
             settingsRepository.fetchOrder().collect { orderType ->
@@ -82,5 +77,16 @@ class HomeViewModel @Inject constructor(
                 this.layoutManager.postValue(layoutManager)
             }
         }
+    }
+
+    fun handleSelectionMode(isSelectionMode: Boolean) {
+        if (!isSelectionMode) {
+            setSelectionMode.postValue(Unit)
+            switchTopRightButton.postValue(R.drawable.ic_check)
+        }
+    }
+
+    fun setTopRightButton(isSelectionMode: Boolean) {
+
     }
 }

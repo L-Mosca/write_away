@@ -1,9 +1,9 @@
 package br.com.writeaway.screen.home
 
 import android.content.res.ColorStateList
-import android.util.Log
 import android.view.LayoutInflater
 import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AlertDialog
 import androidx.biometric.BiometricPrompt
 import androidx.core.content.ContextCompat
@@ -36,12 +36,29 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
     private var listOrder = AppConstants.ORDER_BY_UPDATE_DATE
 
     override fun initViews() {
-        binding.ivSettings.setOnClickListener { goToSettingsScreen() }
+        setupBackPressed()
         setupAdapter()
         setupFab()
+        binding.ivSettings.setOnClickListener { goToSettingsScreen() }
     }
 
     override fun initObservers() {
+        viewModel.switchTopRightButton.observe(viewLifecycleOwner) { iconResource ->
+            with(binding.ivSettings) {
+                setImageResource(iconResource)
+                setColorFilter(
+                    ContextCompat.getColor(
+                        requireContext(),
+                        R.color.red
+                    )
+                )
+            }
+        }
+
+        viewModel.setSelectionMode.observe(viewLifecycleOwner) {
+            adapter.switchSelectionMode(!adapter.isSelectionMode)
+        }
+
         viewModel.textSize.observe(viewLifecycleOwner) { textSize ->
             adapter.textSize = textSize
         }
@@ -52,7 +69,6 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
         }
 
         viewModel.layoutManager.observe(viewLifecycleOwner) { layoutManager ->
-            Log.e("TESTE LAYOUT MANAGER", layoutManager.toString())
             binding.rvNotes.layoutManager = layoutManager.getLisViewValue(requireContext())
             viewModel.fetchNotes()
         }
@@ -128,6 +144,10 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
             navigate(direction, animation = TransitionAnimation.TRANSLATE_FROM_DOWN_POP)
         }
         adapter.onDeleteClicked = { note -> viewModel.deleteNote(note) }
+        adapter.onLongClicked = { _ ->
+            viewModel.handleSelectionMode(adapter.isSelectionMode)
+            viewModel.setTopRightButton(adapter.isSelectionMode)
+        }
 
         binding.rvNotes.layoutManager = GridLayoutManager(requireContext(), 2)
         binding.rvNotes.adapter = adapter
@@ -189,6 +209,18 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
     private fun goToSettingsScreen() {
         val direction = HomeFragmentDirections.actionHomeFragmentToSettingsFragment()
         navigate(direction)
+    }
+
+    private fun setupBackPressed() {
+        val callback = object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                if (adapter.isSelectionMode) adapter.closeSelectionMode()
+                else requireActivity().finish()
+            }
+        }
+
+        callback.isEnabled = true
+        activity?.onBackPressedDispatcher?.addCallback(this, callback)
     }
 
     override fun onResume() {
