@@ -12,6 +12,7 @@ import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.GridLayoutManager
 import br.com.writeaway.R
 import br.com.writeaway.base.BaseFragment
+import br.com.writeaway.base.CustomItemAnimator
 import br.com.writeaway.databinding.FragmentHomeBinding
 import br.com.writeaway.domain.models.Note
 import br.com.writeaway.screen.home.adapter.NoteAdapter
@@ -40,6 +41,8 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
         setupAdapter()
         setupFab()
         binding.ivSettings.setOnClickListener { goToSettingsScreen() }
+        val animation = CustomItemAnimator()
+        binding.rvNotes.itemAnimator = animation
     }
 
     override fun initObservers() {

@@ -24,10 +24,10 @@
         android:layout_width="28dp"
         android:layout_height="28dp"
         android:layout_marginEnd="16dp"
+        android:src="@drawable/ic_settings"
         app:layout_constraintBottom_toBottomOf="@id/tvScreenTitle"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@id/tvScreenTitle"
-        android:src="@drawable/ic_settings" />
+        app:layout_constraintTop_toTopOf="@id/tvScreenTitle" />
 
     <androidx.core.widget.NestedScrollView
         android:id="@+id/nscList"
@@ -49,6 +49,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
+                android:layoutAnimation="@anim/anim_recycler_fall_down"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
